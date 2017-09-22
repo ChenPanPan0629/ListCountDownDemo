@@ -21,11 +21,17 @@ class ListActivity : AppCompatActivity() {
     }
 
     private fun setDate() {
-        countDownAdapter = CountDownAdapter(this, list, Date())
-        lv_count_down.adapter = countDownAdapter
-        lv_count_down.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
-            val intent = Intent(ListActivity@this, Main2Activity::class.java)
-            startActivity(intent)
+        if (countDownAdapter == null) {
+            countDownAdapter = CountDownAdapter(this, list, Date())
+            lv_count_down.adapter = countDownAdapter
+            lv_count_down.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
+                val intent = Intent(ListActivity@this, Main2Activity::class.java)
+                startActivity(intent)
+            }
+        } else {
+            //刷新数据时，重置本地服务器时间
+            countDownAdapter!!.reSetTimer(Date())
+            countDownAdapter!!.notifyDataSetChanged()
         }
     }
 
@@ -34,6 +40,7 @@ class ListActivity : AppCompatActivity() {
             var date = Date(Date().time + i * 1000 * 60 * 30)
             list.add(date)
         }
+
     }
 
     override fun onDestroy() {

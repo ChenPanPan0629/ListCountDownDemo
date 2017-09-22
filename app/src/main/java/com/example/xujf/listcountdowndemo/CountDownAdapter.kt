@@ -88,6 +88,12 @@ class CountDownAdapter(private var activity: ListActivity, private var data: Arr
         handler?.removeCallbacks(runnable)
     }
 
+    fun reSetTimer(date: Date) {
+        removeTimer()
+        systemDate = date
+        handler.postDelayed(runnable, 1000)
+    }
+
     override fun getItem(position: Int): Any = data[position]
 
     override fun getItemId(position: Int): Long = 0L
